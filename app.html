@@ -1,1 +1,185 @@
-Hello
+<html>
+	<head>
+		<script src="./jquery.js"
+				type="text/javascript">
+		</script>
+	</head>
+	<body>
+		<h1>My App</h1>
+		<div id="content">
+		</div>
+		<button id="my_button">Get</button>
+	</body>
+	<script>
+	// Get some data
+	var x = "data";
+	
+	// Render in application
+	$(document).ready(function() {
+		$("#my_button").click(function() {
+			var access_token = "AAACEdEose0cBALfBN3oYc3pj0RSk6OV5qnLa4ZC4I14YJSLU8SKvByZAVxZBmvxPjOGl70K2KyDfjxuwFBRWOewSjW52XbNdMZCi7beiuwZDZD";
+			
+			var service_name = "https://graph.facebook.com/560850281?access_token=" + access_token;
+			$.getJSON(service_name, function(data) {
+			
+				$("#content").append("<h1>I. User's Basic Information</h1>");
+				//name
+				if(data["username"] == null)
+					var name = "<br>Name: Not specified";
+				else
+					var name = "<br>Name: " + data["username"]
+				$("#content").append(name);
+				if(data["gender"] == null)
+					var gender = "<br>Gender: Not specified";
+				else
+					var gender = "<br>Gender: " + data["gender"];
+				$("#content").append(gender);
+			});
+			var service_name2 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=age_range";
+			$.getJSON(service_name2, function(data) {
+				if(data["age_range"]["max"] == null)
+					var age = "<br>Age: Not specified";
+				else
+					var age = "<br>Age: " + data["age_range"]["max"];
+				$("#content").append(age);
+			});
+			var service_name3 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=location";
+			$.getJSON(service_name3, function(data) {
+				if(data["location"] == null)
+					var age = "<br>Address/location: Not specified";
+				else
+					var age = "<br>Address/location: " + data["alocation"];
+				$("#content").append(age);
+			});
+			//phone num
+			//email
+			var service_name3 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=email";
+			$.getJSON(service_name3, function(data) {
+				if(data["email"] == null)
+					var email = "<br>Email: Not specified";
+				else
+					var email = "<br>Email: " + data["email"];
+				$("#content").append(email);
+			});
+			
+			//language
+			var service_name4 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=languages";
+			$.getJSON(service_name4, function(data) {
+				if(data["languages"] == null)
+					var input = "<br>Languages spoken: Not specified";
+				else
+					var input = "<br>Languages spoken: " + data["languages"];
+				$("#content").append(input);
+			});
+			//bday
+			var service_name5 = "https://graph.facebook.com/560850281?access_token=" + access_token;
+			$.getJSON(service_name5, function(data) {
+				if(data["birthday"] == null)
+					var input = "<br>Birthday: Not specified";
+				else
+					var input = "<br>Birthday: " + data["birthday"];
+				$("#content").append(input);
+			});
+			
+			var service_name6 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=interests";
+			$.getJSON(service_name6, function(data) {
+				if(data["birthday"] == null)
+					var input = "<br>Interest: Not specified";
+				else
+					var input = "<br>Interest: " + data["interests"];
+				$("#content").append(input);
+			});
+			var service_name7 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=religion";
+			$.getJSON(service_name7, function(data) {
+				if(data["religion"] == null)
+					var input = "<br>Religion: Not specified";
+				else
+					var input = "<br>Religion: " + data["religion"];
+				$("#content").append(input);
+			});
+			var service_name8 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=photos";
+			$.getJSON(service_name8, function(data) {
+				$("#content").append("<h1>II. Pictures</h2>");
+				//var name = "<img src=" + data["picture"]["data"]["url"] + ">";
+				var list = data["photos"];
+				var pics = "";
+				if(list.data.length == 0)
+					pics = "<br>Most recent displayed pictures: Not applicable";
+				
+				for(var a = 0; a < list.data.length; a++){
+					if(a == 5)
+						break;
+					pics += "<img src=" + data["photos"]["data"][a]["source"] + "><br>Posted by: " + data["photos"]["data"][a]["from"]["name"] + "<br>";
+					
+				}
+				$("#content").append(pics);
+				if(data["cover"] == null)
+					var input = "<br>Cover Photo: Not specified";
+				else
+					var input = "<br>Cover Photo: " + data["cover"]["src"];
+				$("#content").append(input);
+			});
+			var service_name10 = "https://graph.facebook.com/560850281?access_token=" + access_token + "&fields=likes,friends,relationship_status,events";
+			$.getJSON(service_name10, function(data) {
+			$("#content").append("<h1>III. Social Aspect</h2>");
+				
+				
+				if(data["events"] == null)
+					var input = "<br>Latest Event Attended: Not specified";
+				else{
+					var list = data["events"];
+					
+					var input = "<br>Latest Event Attended: Not specified" ;
+					for(var a = 0; a < list.data.length; a++){
+							if(data["events"]["data"][a]["rsvp_status"] == "attending"){
+								input = "<br>Latest Event Attended: " + data["events"]["data"][a]["name"];
+								break;
+							}
+						}
+				}
+				$("#content").append(input);
+			var list = data["likes"];
+				var title = "<h2>Likes: </h2>";
+				$("#content").append(title);
+				
+				for(var a = 0; a < list.data.length; a++)
+				{
+					if(a == list.data.length-1)
+					{
+						var name2 = "<h7>" + data["likes"]["data"][a]["name"] + "</h7>";
+						$("#content").append(name2);
+						break;
+					}
+					var name2 = "<h7>" + data["likes"]["data"][a]["name"] + " , </h7>";
+					$("#content").append(name2);
+				}
+				
+				
+				var list = data["friends"];
+				var title = "<h2>Friends: </h2>";
+				$("#content").append(title);
+				
+				for(var a = 0; a < list.data.length; a++)
+				{
+					
+					if(a == list.data.length-1)
+					{
+						var name2 = "<h7>" + data["friends"]["data"][a]["name"] + "</h7>";
+						$("#content").append(name2);
+						break;
+					}
+					var name2 = "<h7>" + data["friends"]["data"][a]["name"] + " , </h7>";
+					$("#content").append(name2);
+				}
+				
+				if(data["relationship_status"] == null)
+					var input = "<br>Relationship Status: Not specified";
+				else
+					var input = "<br><br>Relationship Status: " + data["relationship_status"];
+				$("#content").append(input);
+			});
+				
+			});
+	});
+	</script>
+</html>
